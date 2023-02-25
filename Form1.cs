@@ -52,7 +52,9 @@ namespace documentReading
 
                 // Lee los datos de las celdas
                 Range range = worksheet.UsedRange;
-
+                dt.Rows.Clear();
+                dt.Columns.Clear();
+                dt.Clear();
                 for (int j = 1; j <= range.Columns.Count; j++)
                 {
                     // Agrega el nombre de cada columna a la tabla

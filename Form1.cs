@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -23,6 +24,7 @@ namespace documentReading
         public Dictionary<string, double> totalByAge = new Dictionary<string, double>();
         public List<string> stringsAge = new List<string>();
 
+        public double total = 0;
         public Home()
         {
             InitializeComponent();
@@ -127,7 +129,17 @@ namespace documentReading
 
                     // Asigna la tabla al componente dataView
                     dataView.DataSource = dt;
+
+                    label3.Text = "Registros " + dt.Rows.Count.ToString();
+
+                    label2.Text = "Cargando....";
                 }
+
+                //Total
+                this.total = dt.AsEnumerable()
+                    .Sum(x => Convert.ToDouble(x["Vendido"]));
+
+                label2.Text = "Total: Q " + this.total.ToString();
 
                 // Cierra el archivo de Excel
                 workbook.Close();
@@ -164,11 +176,22 @@ namespace documentReading
 
                 dataView.DataSource = dataTableGroup;
             }
+
+            label2.Text = "";
+            label3.Text = "Registros " + dataTableGroup.Rows.Count.ToString();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             dataView.DataSource = dt;
+
+            //Total
+            this.total = dt.AsEnumerable()
+                .Sum(x => Convert.ToDouble(x["Vendido"]));
+
+            label2.Text = "Total: Q " + this.total.ToString();
+
+            label3.Text = "Registros " + dt.Rows.Count.ToString();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -197,6 +220,9 @@ namespace documentReading
 
                 dataView.DataSource = dataTableAge;
             }
+
+            label2.Text = "";
+            label3.Text = "Registros " + dataTableAge.Rows.Count.ToString();
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -236,7 +262,28 @@ namespace documentReading
 
                 // Mostrar los datos en el DataView
                 dataView.DataSource = dtSearch;
+
+                //Total
+                this.total = dtSearch.AsEnumerable()
+                    .Sum(x => Convert.ToDouble(x["Vendido"]));
+
+                label2.Text = "Total: Q " + this.total.ToString();
+
+                label3.Text = "Registros " + dtSearch.Rows.Count.ToString();
             }
+        }
+        private void dataView_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+            Console.WriteLine("Valor de la celda: " + dataView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()
+                + " - Fila: " + e.RowIndex
+                + " - Columna: " + e.ColumnIndex
+            );
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
